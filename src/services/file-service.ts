@@ -1,8 +1,8 @@
 import { glob } from "glob";
-import {join, sep} from "path";
+import { join, sep } from "path";
 import { ServiceHandler } from "../handlers";
-import { LoggerService } from "./index";
 import { ILoadOptions } from "../models";
+import { LoggerService } from "./index";
 
 class FileService{
     private _logger = ServiceHandler.getInstance().getServiceByName<LoggerService>("LoggerService")
@@ -12,7 +12,7 @@ class FileService{
 
         const filePaths = await glob(`${join(process.cwd(),path)}${pattern ?? "/*[.ts,.js]"}`,{ignore:"./node_modules/*"});
 
-        for(const filePath of filePaths){
+        for(const filePath of filePaths.filter(path => !path.includes("index.ts"))){
             try{
                 const module = await import(`file://${join(process.cwd(),filePath)}`);
 
