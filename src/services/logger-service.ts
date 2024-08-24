@@ -1,4 +1,4 @@
-import { createLogger, Logger,transports,format } from "winston";
+import { createLogger, format, Logger, transports } from "winston";
 import { LOGGER_CONFIG } from "../constants/config";
 import { LogMessage } from "../models";
 
@@ -16,9 +16,9 @@ class LoggerService{
                 )
             }),
             new transports.File({
-                filename:'error.log',
+                filename:"error.log",
+                level:"error",
                 dirname:LOGGER_CONFIG.LOG_DIRNAME,
-                level:'error',
                 format:format.combine(
                     format.json(),
                     format.timestamp({
@@ -26,7 +26,18 @@ class LoggerService{
                     }),
                     format.prettyPrint()
                 ),
-                maxsize:50000
+            }),
+            new transports.File({
+                filename:"warn.log",
+                level:"warn",
+                dirname:LOGGER_CONFIG.LOG_DIRNAME,
+                format:format.combine(
+                    format.json(),
+                    format.timestamp({
+                        format: 'YYYY-MM-DD HH:mm:ss A'
+                    }),
+                    format.prettyPrint()
+                )
             })
         ]
     });
