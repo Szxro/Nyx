@@ -4,9 +4,9 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
+    "start": "node ./dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "build": "",
-    "start": "node ."
+    "build": "rimraf ./dist/* && tsc --build"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
   "dependencies": {
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
+    "rimraf": "^6.0.1",
     "winston": "^3.17.0"
   }
 }
