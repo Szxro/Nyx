@@ -20,7 +20,7 @@ class ServiceManager{
         return ServiceManager._instance;
     }
     
-    register<T>(serviceName:string,serviceConstructor:Function):void{
+    register(serviceName:string,serviceConstructor:Function):void{
         if(this._singleton.has(serviceName) || this._transient.has(serviceName)) return;
 
         if(this.isSingleton(serviceConstructor)){
@@ -46,6 +46,11 @@ class ServiceManager{
         }
 
         throw new NotFoundService(`The service with the name ${serviceName} is not currently register`);
+    }
+
+    clear(): void{
+        this._singleton.clear();
+        this._transient.clear();
     }
 
     private isSingleton<T>(service:unknown):service is SingletonConstructor<T>{
