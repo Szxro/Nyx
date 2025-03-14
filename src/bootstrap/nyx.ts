@@ -5,7 +5,7 @@ import { cwd } from "process";
 import { pathToFileURL } from "url";
 import { BaseCommand } from "../common/base/base-command";
 import { BaseEvent } from "../common/base/base-event";
-import { CLIENT_CONFIG, CLIENT_INTENTS, ENVIROMENT_CONFIG } from "../common/constants/config";
+import { configuration } from "../common/constants/config";
 import { PropsCantBeUndefined } from "../common/errors/props-cant-be-undefined";
 import { ServiceManager } from "../common/managers/service-manager";
 import { CommandProps } from "../models/commands";
@@ -17,7 +17,7 @@ class Nyx {
     public readonly slashCommandsMap:Map<string,CommandProps> = new Map<string,CommandProps>;
 
     constructor(
-        private readonly _client:Client = new Client({ intents: CLIENT_INTENTS }),
+        private readonly _client:Client = new Client({ intents: configuration.CLIENT_INTENTS }),
         private readonly _logger:LoggerService = LoggerService.getInstance(),
         private readonly _serviceManager:ServiceManager = ServiceManager.getInstance()
     ){}
@@ -27,7 +27,7 @@ class Nyx {
         await this.registerServicesAsync();
         await this.registerEventsAsync();
         await this.deployCommandsAsync();
-        await this._client.login(CLIENT_CONFIG.DISCORD_TOKEN);
+        await this._client.login(configuration.DISCORD_TOKEN);
     }
 
     private registerErrorHandlersSync(){
@@ -153,16 +153,16 @@ class Nyx {
         }
 
         try{
-            const rest = new REST().setToken(CLIENT_CONFIG.DISCORD_TOKEN);
+            const rest = new REST().setToken(configuration.DISCORD_TOKEN);
     
-            const route = ENVIROMENT_CONFIG === "development" 
-                ? Routes.applicationGuildCommands(CLIENT_CONFIG.CLIENT_ID,CLIENT_CONFIG.SERVER_ID) 
-                : Routes.applicationCommands(CLIENT_CONFIG.CLIENT_ID);
+            const route = configuration.ENVIRONMENT === "development" 
+                ? Routes.applicationGuildCommands(configuration.CLIENT_ID, configuration.SERVER_ID) 
+                : Routes.applicationCommands(configuration.CLIENT_ID);
     
             await rest.put(route,{ body:this._slashCommands });
     
             this._logger.info({
-                message:`Succesfully deploy of ${this._slashCommands.length} application (/) commands into the ${ENVIROMENT_CONFIG} server`,
+                message:`Succesfully deploy of ${this._slashCommands.length} application (/) commands into the ${configuration.ENVIRONMENT} server`,
                 metadata:[{provider:"nyx"}]
             });
         }catch(error:unknown){

@@ -1,25 +1,41 @@
 import { config } from "dotenv";
+import { existsSync, mkdirSync } from "fs";
 import { join, resolve } from "path";
+import { z } from "zod";
 
-const enviroment = process.env.NODE_ENV || "development";
+// Load environment variables
+const ENVIRONMENT  = process.env.NODE_ENV || "development";
 
-config({path:resolve(process.cwd(),`.env.${enviroment}`)});
+config({path:resolve(process.cwd(),`.env.${ENVIRONMENT}`)});
 
-const ENVIROMENT_CONFIG = process.env.NODE_ENV || "development";
+// Discord intents
+const CLIENT_INTENTS = 32767;  // Note: 32767 represent all possibles intents
 
-const CLIENT_CONFIG = {
-    DISCORD_TOKEN: process.env.DISCORD_TOKEN,
-    CLIENT_ID: process.env.CLIENT_ID,
-    SERVER_ID:process.env.SERVER_ID,
-} as const;
+// Log directory setup
+const LOG_DIRNAME = join(process.cwd(),'logs');
 
-// 32767 represent all possibles intents
-const CLIENT_INTENTS = 32767; 
+if(!existsSync(LOG_DIRNAME)){
+    mkdirSync(LOG_DIRNAME,{ recursive: true});
+}
 
-const LOGGER_CONFIG = {
-    MIN_LEVEL: process.env.LOGGER_MIN_LEVEL,
-    LOG_DIRNAME: join(process.cwd(),'logs')
-} as const;
+// Environment variable validation
+const envSchema = z.object({
+    CLIENT_ID: z.string().min(1,"CLIENT_ID must be defined"),
+    DISCORD_TOKEN: z.string().min(1,"DISCORD_TOKEN must be defined"),
+    LOGGER_MIN_LEVEL: z.string().default("info"),
+    SERVER_ID: z.string().min(1,"SERVER_ID must be defined")
+});
 
-export { CLIENT_CONFIG, CLIENT_INTENTS, ENVIROMENT_CONFIG, LOGGER_CONFIG };
+const { success, data, error } = envSchema.safeParse(process.env);
 
+if(!success){
+    console.error("❌ Invalid environment variables:",error.format());
+    process.exit(1);
+}
+
+export const configuration = {
+    LOG_DIRNAME,
+    CLIENT_INTENTS,
+    ENVIRONMENT,
+    ...data
+}

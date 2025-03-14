@@ -1,5 +1,5 @@
 import { createLogger, format, Logger, transports } from "winston";
-import { LOGGER_CONFIG } from "../common/constants/config";
+import { configuration } from "../common/constants/config";
 
 type LogMessage = {
     message:string;
@@ -8,7 +8,7 @@ type LogMessage = {
 
 class LoggerService{
     private _logger:Logger = createLogger({
-        level:LOGGER_CONFIG.MIN_LEVEL,
+        level:configuration.LOGGER_MIN_LEVEL,
         transports:[
             new transports.Console({
                 format: format.combine(
@@ -22,7 +22,7 @@ class LoggerService{
             new transports.File({
                 filename:"error.log",
                 level:"error",
-                dirname:LOGGER_CONFIG.LOG_DIRNAME,
+                dirname:configuration.LOG_DIRNAME,
                 format:format.combine(
                     format.json(),
                     format.timestamp({
@@ -34,7 +34,7 @@ class LoggerService{
             new transports.File({
                 filename:"warn.log",
                 level:"warn",
-                dirname:LOGGER_CONFIG.LOG_DIRNAME,
+                dirname:configuration.LOG_DIRNAME,
                 format:format.combine(
                     format.json(),
                     format.timestamp({
@@ -72,3 +72,4 @@ class LoggerService{
 }
 
 export { LoggerService };
+
