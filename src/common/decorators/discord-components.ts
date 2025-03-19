@@ -1,5 +1,5 @@
-import { CommandProps } from "../../models/commands";
-import { EventKeys, EventProps } from "../../models/event";
+import { CommandProps } from "../../models/commands.model";
+import { EventKeys, EventProps } from "../../models/event.model";
 
 type Constructor = { new(...args:any[]): NonNullable<unknown> };
 

@@ -1,7 +1,7 @@
 import { Awaitable } from "discord.js";
 import { BaseEvent } from "../common/base/base-event";
 import { DiscordEvent } from "../common/decorators/discord-components";
-import { EventParams } from "../models/event";
+import { EventParams } from "../models/event.model";
 import { LoggerService } from "../services/logger-service";
 
 @DiscordEvent({ key:'error' })

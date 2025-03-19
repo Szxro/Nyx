@@ -1,5 +1,5 @@
 import { Awaitable } from "discord.js";
-import { CommandParams, CommandProps } from "../../models/commands";
+import { CommandParams, CommandProps } from "../../models/commands.model";
 
 abstract class BaseCommand{
     constructor(readonly props?:Omit<CommandProps,'callback'>){}

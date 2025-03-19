@@ -1,7 +1,7 @@
 import { BaseCommand } from "../common/base/base-command";
 import { DiscordCommand } from "../common/decorators/discord-components";
 import { Measure } from "../common/decorators/measure";
-import { CommandParams } from "../models/commands";
+import { CommandParams } from "../models/commands.model";
 
 @DiscordCommand({
     name:'ping',

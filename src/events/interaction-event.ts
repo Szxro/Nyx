@@ -1,8 +1,8 @@
 import { CacheType, Interaction } from "discord.js";
 import { BaseEvent } from "../common/base/base-event";
 import { DiscordEvent } from "../common/decorators/discord-components";
-import { ExtendedInteraction } from "../models/commands";
-import { EventParams } from "../models/event";
+import { ExtendedInteraction } from "../models/commands.model";
+import { EventParams } from "../models/event.model";
 import { LoggerService } from "../services/logger-service";
 import { isPromiseRejected, WaitOne } from "../utilities/promises";
 
@@ -42,8 +42,8 @@ class InteractionEvent extends BaseEvent<'interactionCreate'>{
                     content: "An error occurred while executing the command.",
                     ephemeral: true
                 });
-    
-                throw result.reason;
+                
+                return;
             }
             return result.data;
         }
@@ -53,11 +53,10 @@ class InteractionEvent extends BaseEvent<'interactionCreate'>{
             metadata:[{
                 provider:"interaction-event"
             }]
-        })
+        });
 
         await interaction.reply({content:"Invalid command, check and try again"});
     }
 }
 
 export default new InteractionEvent();
-
