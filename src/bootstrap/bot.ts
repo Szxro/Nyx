@@ -8,11 +8,11 @@ import { BaseEvent } from "../common/base/base-event";
 import { configuration } from "../common/constants/config";
 import { PropsCantBeUndefined } from "../common/errors/props-cant-be-undefined";
 import { ServiceManager } from "../common/managers/service-manager";
-import { CommandProps } from "../models/commands";
+import { CommandProps } from "../models/commands.model";
 import { LoggerService } from "../services/logger-service";
 import { isPromiseRejected, WaitOne } from "../utilities/promises";
 
-class Nyx {
+class Bot {
     private readonly _slashCommands:ApplicationCommandDataResolvable[] = [];
     public readonly slashCommandsMap:Map<string,CommandProps> = new Map<string,CommandProps>;
 
@@ -49,7 +49,7 @@ class Nyx {
             this._logger.warning({
                 message:'No services were found',
                 metadata:[{
-                    provider:'nyx'
+                    provider:'bot'
                 }]
             });
 
@@ -63,7 +63,7 @@ class Nyx {
         this._logger.info({
             message: `All services registered successfully.`,
             metadata: [{ 
-                provider: "nyx" 
+                provider: "bot" 
             }]
         });
     }
@@ -75,7 +75,7 @@ class Nyx {
             this._logger.warning({
                 message:'No events were found',
                 metadata:[{
-                    provider:'nyx'
+                    provider:'bot'
                 }]
             });
 
@@ -106,7 +106,7 @@ class Nyx {
                 this._logger.warning({
                     message:`Invalid event ${eventInstance.name}. Must extend BaseEvent`,
                     metadata:[{
-                        provider:"nyx"
+                        provider:"bot"
                     }]
                 });
             }
@@ -115,7 +115,7 @@ class Nyx {
         this._logger.info({
             message:"All events registered successfully.",
             metadata:[{
-                provider:"nyx"
+                provider:"bot"
             }]
         });
     } 
@@ -127,7 +127,7 @@ class Nyx {
             this._logger.warning({
                 message:'No commands were found',
                 metadata:[{
-                    provider:'nyx'
+                    provider:'bot'
                 }]
             });
 
@@ -146,7 +146,7 @@ class Nyx {
                 this._logger.warning({
                     message:`Invalid command instance ${commandInstance.name}. Must extend BaseCommand`,
                     metadata:[{
-                        provider:"nyx"
+                        provider:"bot"
                     }]
                 });
             }
@@ -163,13 +163,13 @@ class Nyx {
     
             this._logger.info({
                 message:`Succesfully deploy of ${this._slashCommands.length} application (/) commands into the ${configuration.ENVIRONMENT} server`,
-                metadata:[{provider:"nyx"}]
+                metadata:[{provider:"bot"}]
             });
         }catch(error:unknown){
             this._logger.error({
                 message:`An unexpected error occurred while deploying slash commands, with the error message: '${error instanceof  Error ? error.message : "Unknown error message"}'`,
                 metadata:[{
-                    provider:"nyx",
+                    provider:"bot",
                     stack:error instanceof Error ? error.stack || "Not available stack" : error
                 }]
             });
@@ -194,7 +194,7 @@ class Nyx {
                     this._logger.error({ 
                         message:`An unexpected error occurred while importing ${instance}`,
                         metadata:[{
-                            provider: "nyx",
+                            provider: "bot",
                             stack: result.reason instanceof Error ? result.reason.stack || "No stack available" : "No stack available"
                         }]
                     });
@@ -222,7 +222,7 @@ class Nyx {
         this._logger.error({
             message,
             metadata:[{
-                provider:"nyx",
+                provider:"bot",
                 stack:error instanceof Error ? error.stack || "Not available stack" : error
             }]
         });
@@ -231,5 +231,5 @@ class Nyx {
     }
 }
 
-export { Nyx };
+export { Bot };
 
