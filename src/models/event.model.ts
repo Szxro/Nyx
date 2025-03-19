@@ -1,11 +1,11 @@
 import { ClientEvents } from "discord.js";
-import { Nyx } from "../bootstrap/nyx";
+import { Bot } from "../bootstrap/bot";
 import { ServiceManager } from "../common/managers/service-manager";
 
 type EventKeys = keyof ClientEvents;
 
 type EventParams = {
-    client:Nyx,
+    client:Bot,
     services:ServiceManager    
 };
 

@@ -1,12 +1,12 @@
 import { Awaitable, CacheType, CommandInteraction, CommandInteractionOptionResolver, GuildMember, PermissionResolvable } from "discord.js";
-import { Nyx } from "../bootstrap/nyx";
+import { Bot } from "../bootstrap/bot";
 import { ServiceManager } from "../common/managers/service-manager";
 
 // type extension to include the GuildMember abstract class
 type ExtendedInteraction = {member: GuildMember} & CommandInteraction;
 
 type CommandParams = {
-    client:Nyx,
+    client:Bot,
     interaction:ExtendedInteraction, // Represents the command interaction
     //A resolver for command interaction options.
     args:Omit<CommandInteractionOptionResolver<CacheType>,"getMessage" | "getFocused">,
