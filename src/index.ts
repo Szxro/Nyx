@@ -1,7 +1,7 @@
-import { Nyx } from "./bootstrap/nyx";
+import { Bot } from "./bootstrap/bot";
 
 (async () =>{
-    const bot = new Nyx();
+    const bot = new Bot();
 
     await bot.runAsync();
 })();
