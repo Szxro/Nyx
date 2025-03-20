@@ -1,15 +1,9 @@
 import { config } from "dotenv";
 import { existsSync, mkdirSync } from "fs";
-import { join, resolve } from "path";
+import { join } from "path";
 import { z } from "zod";
 
-// Load environment variables
-const ENVIRONMENT  = process.env.NODE_ENV || "development";
-
-config({path:resolve(process.cwd(),`.env.${ENVIRONMENT}`)});
-
-// Discord intents
-const CLIENT_INTENTS = 32767;  // Note: 32767 represent all possibles intents
+config();
 
 // Log directory setup
 const LOG_DIRNAME = join(process.cwd(),'logs');
@@ -20,10 +14,12 @@ if(!existsSync(LOG_DIRNAME)){
 
 // Environment variable validation
 const envSchema = z.object({
-    CLIENT_ID: z.string().min(1,"CLIENT_ID must be defined"),
+    NODE_ENV: z.string().min(1,"NODE_ENV must be provided"),
     DISCORD_TOKEN: z.string().min(1,"DISCORD_TOKEN must be defined"),
-    LOGGER_MIN_LEVEL: z.string().default("info"),
-    SERVER_ID: z.string().min(1,"SERVER_ID must be defined")
+    APPLICATION_ID: z.string().min(1,"APPLICATION_ID must be defined"),
+    DEV_SERVER_ID: z.string().min(1,"DEV_SERVER_ID must be defined"),
+    PROD_SERVER_ID: z.string().min(1,"PROD_SERVER_ID must be defined"),
+    LOGGER_MIN_LEVEL: z.string().default("info")
 });
 
 const { success, data, error } = envSchema.safeParse(process.env);
@@ -34,8 +30,7 @@ if(!success){
 }
 
 export const configuration = {
+    CLIENT_INTENTS: 32767,  // Note: 32767 represent all possibles intents
     LOG_DIRNAME,
-    CLIENT_INTENTS,
-    ENVIRONMENT,
     ...data
 }
