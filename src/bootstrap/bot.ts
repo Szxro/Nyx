@@ -155,15 +155,17 @@ class Bot {
         try{
             const rest = new REST().setToken(configuration.DISCORD_TOKEN);
     
-            const route = configuration.ENVIRONMENT === "development" 
-                ? Routes.applicationGuildCommands(configuration.CLIENT_ID, configuration.SERVER_ID) 
-                : Routes.applicationCommands(configuration.CLIENT_ID);
+            const route = configuration.NODE_ENV === "development" 
+                ? Routes.applicationGuildCommands(configuration.APPLICATION_ID, configuration.DEV_SERVER_ID) 
+                : Routes.applicationCommands(configuration.PROD_SERVER_ID);
     
             await rest.put(route,{ body:this._slashCommands });
     
             this._logger.info({
-                message:`Succesfully deploy of ${this._slashCommands.length} application (/) commands into the ${configuration.ENVIRONMENT} server`,
-                metadata:[{provider:"bot"}]
+                message:`Succesfully deploy of ${this._slashCommands.length} application (/) commands into the ${configuration.NODE_ENV} server`,
+                metadata:[{
+                    provider:"bot"
+                }]
             });
         }catch(error:unknown){
             this._logger.error({
