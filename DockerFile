@@ -1,24 +1,11 @@
-
-FROM node:20.18.3 as dev-deps 
+FROM node:20.18.3-alpine3.21 AS dev-deps
 WORKDIR /app
-COPY package.json package.json
-RUN npm ci
+COPY package.json package-lock.json ./
+RUN npm install
 
-FROM node:20.18.3 as builder
+FROM node:20.18.3-alpine3.21 AS dev-setup
 WORKDIR /app
 COPY --from=dev-deps /app/node_modules ./node_modules
 COPY . .
-RUN npm build
-
-FROM node:20.18.3 as prod-deps
-WORKDIR /app
-COPY package.json package.json
-RUN npm install --production
-
-
-FROM node:20.18.3 as prod
-WORKDIR /app
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-
-CMD [ "node","dist/main.js"]
+RUN npm install -g tsx
+CMD ["tsx", "watch", "src/index.ts"]
